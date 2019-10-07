@@ -5,9 +5,9 @@
 #' @import htmlwidgets
 #'
 #' @export
-triviawidget <- function(questions, el) {
+triviawidget <- function(questions) {
   # create widget
-  htmlwidgets::createWidget(name = 'triviawidget', list(questions, el))
+  htmlwidgets::createWidget(name = 'triviawidget', questions)
 }
 
 #' Shiny bindings for triviawidget

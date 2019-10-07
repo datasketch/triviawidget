@@ -23,5 +23,3 @@ function renderElement(node) {
 
   return el
 }
-
-export { renderElement, createElement }
