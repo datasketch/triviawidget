@@ -1,8 +1,14 @@
-#' <Add Title>
+#' triviawidget
 #'
-#' <Add Description>
+#' Render a trivia based on a list of questions
 #'
 #' @import htmlwidgets
+#' @param questions A list of questions. Every question must have the properties listed below.
+#' \describe{
+#'   \item{text}{The question text}
+#'   \item{choices}{A list of strings with the possible answers}
+#'   \item{answer}{The 0-based index of the correct choice}
+#' }
 #'
 #' @export
 triviawidget <- function(questions) {

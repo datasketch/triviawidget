@@ -2,10 +2,18 @@
 % Please edit documentation in R/triviawidget.R
 \name{triviawidget}
 \alias{triviawidget}
-\title{<Add Title>}
+\title{triviawidget}
 \usage{
-triviawidget(questions, el)
+triviawidget(questions)
+}
+\arguments{
+\item{questions}{A list of questions. Every question must have the properties listed below.
+\describe{
+  \item{text}{The question text}
+  \item{choices}{A list of strings with the possible answers}
+  \item{answer}{The 0-based index of the correct choice}
+}}
 }
 \description{
-<Add Description>
+Render a trivia based on a list of questions
 }
