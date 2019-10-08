@@ -1,4 +1,9 @@
-.quiz-progress {
+html,
+body {
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.trivia-progress {
   border-bottom: 2px dotted #b4b9cd;
   color: #b4b9cd;
   font-size: 1.875rem;
@@ -6,25 +11,25 @@
   padding-bottom: 0.5rem;
 }
 
-.quiz-score {
+.trivia-score {
   color: #b4b9cd;
   font-size: 2.25rem;
   font-weight: 500;
   padding: 2.5rem 0;
 }
 
-.questions {
+.trivia-questions {
   margin-top: 2rem;
   color: #060814;
 }
 
-.question-text {
+.trivia-question-text {
   font-size: 2.25rem;
   font-weight: 700;
   margin-bottom: 3rem;
 }
 
-.answer {
+.trivia-answer {
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
@@ -42,7 +47,7 @@
   user-select: none;
 }
 
-.answer:hover {
+.trivia-answer:hover {
   background-color: #545a75;
   color: #ffffff;
 }
