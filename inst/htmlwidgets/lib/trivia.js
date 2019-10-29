@@ -16,7 +16,9 @@ function Trivia(config) {
   this.score = 0;
   this.step = 0;
   this.slots = {};
+  this.answer = [];
   this.handleAnswerChange = this.handleAnswerChange.bind(this);
+  this.handleNextButton = this.handleNextButton.bind(this);
 }
 
 Trivia.prototype.init = function init() {
@@ -28,17 +30,27 @@ Trivia.prototype.createSlots = function createSlots() {
   this.slots.progress = document.createElement('div');
   this.slots.questions = document.createElement('div');
   this.slots.score = document.createElement('div');
+  this.slots.button = document.createElement('button');
 
   this.slots.progress.classList.add('trivia-progress');
   this.slots.questions.classList.add('trivia-questions');
   this.slots.score.classList.add('trivia-score');
+  this.slots.button.classList.add('trivia-next');
 
   this.el.appendChild(this.slots.progress);
   this.el.appendChild(this.slots.questions);
+  this.el.appendChild(this.slots.button);
+
+  this.registerNextButton();
+};
+
+Trivia.prototype.registerNextButton = function registerNextButton() {
+  this.slots.button.textContent = 'Siguiente';
+  this.slots.button.addEventListener('click', this.handleNextButton);
 };
 
 Trivia.prototype.updateProgress = function createProgress() {
-  this.slots.progress.textContent = 'Pregunta ' + (this.step + 1) + '/' + this.questions.length;
+  this.slots.progress.textContent = `Pregunta ${this.step + 1}/${this.questions.length}`;
 };
 
 Trivia.prototype.isOver = function isOver() {
@@ -50,11 +62,14 @@ Trivia.prototype.play = function showQuestion() {
     this.showScore();
     return;
   }
+  this.slots.button.setAttribute('disabled', '');
   this.updateProgress();
   const question = this.renderQuestion(this.questions[this.step]);
-  this.slots.questions.hasChildNodes()
-    ? this.slots.questions.replaceChild(question, this.slots.questions.childNodes[0])
-    : this.slots.questions.appendChild(question);
+  if (this.slots.questions.hasChildNodes()) {
+    this.slots.questions.replaceChild(question, this.slots.questions.childNodes[0]);
+  } else {
+    this.slots.questions.appendChild(question);
+  }
   this.enableGame();
 };
 
@@ -64,18 +79,28 @@ Trivia.prototype.enableGame = function enableGame() {
 };
 
 Trivia.prototype.handleAnswerChange = function handleAnswerChange(event) {
-  const value = parseInt(event.target.value);
-  const question = this.questions[this.step];
-  if (question.answer === value) {
-    this.score++;
+  const answer = parseInt(event.target.value, 10);
+  if (this.answer.includes(answer)) {
+    this.answer.splice(this.answer.indexOf(answer), 1);
+  } else {
+    this.answer.push(answer);
   }
+  this.slots.button.removeAttribute('disabled');
+};
+
+Trivia.prototype.handleNextButton = function handleNextButton() {
+  const question = this.questions[this.step];
+  const guessed = this.answer.filter((answer) => question.answer.includes(answer));
+  const score = guessed.length / question.answer.length;
+  this.score += score;
+  this.el.querySelector('.trivia-answers').removeEventListener('change', this.handleAnswerChange);
   this.step = this.step + 1;
-  event.currentTarget.removeEventListener('change', this.handleAnswerChange);
+  this.answer = [];
   this.play();
 };
 
 Trivia.prototype.showScore = function showScore() {
-  this.slots.score.textContent = 'Resultado: ' + this.score + '/' + this.questions.length + '!';
+  this.slots.score.textContent = `Resultado: ${this.score}/${this.questions.length}`;
   this.el.innerHTML = '';
   this.el.appendChild(this.slots.score);
 };
@@ -91,7 +116,7 @@ Trivia.prototype.renderQuestion = function renderQuestion(question) {
 
   triviaQuestionText.textContent = question.text;
 
-  question.choices.forEach(function (choice, index) {
+  question.choices.forEach((choice, index) => {
     const triviaAnswer = document.createElement('label');
     const triviaAnswerInput = document.createElement('input');
     const triviaAnswerSpan = document.createElement('span');
@@ -100,7 +125,7 @@ Trivia.prototype.renderQuestion = function renderQuestion(question) {
 
     triviaAnswerSpan.textContent = choice;
 
-    triviaAnswerInput.setAttribute('type', 'radio');
+    triviaAnswerInput.setAttribute('type', question.answer.length > 1 ? 'checkbox' : 'radio');
     triviaAnswerInput.setAttribute('name', 'question');
     triviaAnswerInput.setAttribute('value', index);
 

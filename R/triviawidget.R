@@ -7,7 +7,7 @@
 #' \describe{
 #'   \item{text}{The question text}
 #'   \item{choices}{A list of strings with the possible answers}
-#'   \item{answer}{The 0-based index of the correct choice}
+#'   \item{answer}{A list with the 0-based index correct choice or choices}
 #' }
 #'
 #' @export
